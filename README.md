@@ -32,3 +32,10 @@ python3 -m http.server 8077
 ## Check
 
 本次用 Windows Edge 实际检查了添加、完成、删除、筛选、刷新恢复与 `clearCompleted()`；冻结旧数组和对象检查不可变更新；检查异常存储与纯文本显示。320～1100px 的代表视口保持原有响应式布局。
+
+## Review drafts
+
+- [draft1.js](review/draft1.js)：记录 1 的完整 AI 初稿，保留时间戳 ID 写法。
+- [draft2.js](review/draft2.js)：记录 2 的完整 AI 初稿，保留初始保存、恢复与筛选写法。
+
+这些文件用于核对协作记录中的审查与修改；页面入口使用根目录的最终 `todo.js`。
