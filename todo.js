@@ -52,6 +52,12 @@ function removeTodo(id) {
   render();
 }
 
+function clearCompleted() {
+  todos = todos.filter((todo) => !todo.completed);
+  save();
+  render();
+}
+
 function toggleTodo(id) {
   todos = todos.map((todo) =>
     todo.id === id ? { ...todo, completed: !todo.completed } : todo
