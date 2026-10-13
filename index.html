@@ -17,6 +17,11 @@
     <div class="todo-entry"><input id="todo-input" type="text" placeholder="例如：复习 DOM 事件" aria-describedby="todo-message" autocomplete="off"><button type="submit">添加</button></div>
   </form>
   <p id="todo-message" role="status" aria-live="polite"></p>
+  <div id="todo-filters" role="group" aria-label="筛选待办">
+    <button class="filter-button" type="button" data-filter="all" aria-pressed="true">全部</button>
+    <button class="filter-button" type="button" data-filter="active" aria-pressed="false">未完成</button>
+    <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">已完成</button>
+  </div>
   <div class="todo-summary"><h3>待办列表</h3><span id="todo-count" class="meta"></span></div>
   <p id="empty-state" class="meta">还没有待办，先添加一件事。</p>
   <ul id="todo-list"></ul>

@@ -7,14 +7,32 @@ const count = document.querySelector("#todo-count");
 const empty = document.querySelector("#empty-state");
 const message = document.querySelector("#todo-message");
 const storageKey = "web-w07-todos";
+let currentFilter = "all";
 let todos = load();
 
 function save() {
-  localStorage.setItem(storageKey, JSON.stringify(todos));
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(todos));
+    message.textContent = "";
+  } catch {
+    message.textContent = "本次更改未保存，请检查浏览器存储设置。";
+  }
 }
 
 function load() {
-  return JSON.parse(localStorage.getItem(storageKey)) || [];
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey)) ?? [];
+    const valid = Array.isArray(saved) && saved.every((todo) =>
+      todo !== null && typeof todo === "object" &&
+      typeof todo.id === "string" && typeof todo.text === "string" &&
+      typeof todo.completed === "boolean"
+    );
+    if (!valid) throw new Error("Invalid todo data");
+    return saved;
+  } catch {
+    message.textContent = "本地数据无法恢复，本次从空列表开始。";
+    return [];
+  }
 }
 
 // 操作函数只改数据，统一交给 render() 更新页面。
@@ -44,7 +62,12 @@ function toggleTodo(id) {
 
 function render() {
   list.replaceChildren();
-  todos.forEach(({ id, text, completed }) => {
+  const visibleTodos = todos.filter((todo) => {
+    if (currentFilter === "active") return !todo.completed;
+    if (currentFilter === "completed") return todo.completed;
+    return true;
+  });
+  visibleTodos.forEach(({ id, text, completed }) => {
     const li = document.createElement("li");
     li.className = `todo-item${completed ? " is-completed" : ""}`;
     li.dataset.id = id;
@@ -69,7 +92,11 @@ function render() {
   });
   const completedCount = todos.filter((todo) => todo.completed).length;
   count.textContent = `共 ${todos.length} 项 · 未完成 ${todos.length - completedCount} · 已完成 ${completedCount}`;
-  empty.hidden = todos.length > 0;
+  empty.hidden = visibleTodos.length > 0;
+  empty.textContent = todos.length === 0 ? "还没有待办，先添加一件事。" : "当前筛选下没有任务。";
+  document.querySelectorAll("[data-filter]").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.filter === currentFilter));
+  });
 }
 
 form.addEventListener("submit", (event) => {
@@ -82,8 +109,15 @@ form.addEventListener("submit", (event) => {
   }
   input.value = "";
   input.removeAttribute("aria-invalid");
-  message.textContent = "已添加一项待办。";
+  if (message.textContent === "") message.textContent = "已添加一项待办。";
   input.focus();
+});
+
+document.querySelectorAll("[data-filter]").forEach((button) => {
+  button.addEventListener("click", () => {
+    currentFilter = button.dataset.filter;
+    render();
+  });
 });
 
 render();

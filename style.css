@@ -66,3 +66,8 @@ button:focus-visible, input:focus-visible { outline: 2px solid #1e3a5f; outline-
 .todo-item.is-completed .todo-text { text-decoration: line-through; color: #526174; }
 .todo-delete { flex: none; padding: 4px 10px; background: #fff; color: #1e3a5f; }
 .todo-delete:hover { background: #eaf1fb; }
+
+#todo-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.filter-button { background: #fff; color: #1e3a5f; padding: 6px 14px; }
+.filter-button[aria-pressed="true"] { background: #1e3a5f; color: #fff; }
+.filter-button:hover { background: #eaf1fb; color: #1e3a5f; }
