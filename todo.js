@@ -46,7 +46,8 @@ function addTodo(rawText) {
   return true;
 }
 
-function removeTodo(id) {
+function deleteTodo(id) {
+  console.log(`[deleteTodo] id=${id}`);
   todos = todos.filter((todo) => todo.id !== id);
   save();
   render();
@@ -59,9 +60,26 @@ function clearCompleted() {
 }
 
 function toggleTodo(id) {
+  console.log(`[toggleTodo] id=${id} found=${todos.some((todo) => todo.id === id)}`);
   todos = todos.map((todo) =>
     todo.id === id ? { ...todo, completed: !todo.completed } : todo
   );
+  save();
+  render();
+}
+
+function editTodo(id) {
+  const item = todos.find((todo) => todo.id === id);
+  if (!item) return;
+  const rawText = window.prompt("编辑待办内容", item.text);
+  if (rawText === null) return;
+  const text = rawText.trim();
+  if (text === "") {
+    message.textContent = "待办内容不能为空，原任务未修改。";
+    return;
+  }
+  console.log(`[editTodo] id=${id} completed=${item.completed}`);
+  todos = todos.map((todo) => todo.id === id ? { ...todo, text } : todo);
   save();
   render();
 }
@@ -77,23 +95,40 @@ function render() {
     const li = document.createElement("li");
     li.className = `todo-item${completed ? " is-completed" : ""}`;
     li.dataset.id = id;
-    const label = document.createElement("label");
+    const content = document.createElement("div");
+    content.className = "todo-content";
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "todo-toggle";
     checkbox.checked = completed;
-    checkbox.addEventListener("change", () => toggleTodo(id));
+    checkbox.setAttribute("aria-label", `切换完成状态：${text}`);
     const span = document.createElement("span");
     span.className = "todo-text";
     span.textContent = text;
-    label.append(checkbox, span);
+    content.append(checkbox, span);
+    const actions = document.createElement("div");
+    actions.className = "todo-actions";
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.className = "todo-edit";
+    editButton.dataset.action = "edit";
+    editButton.textContent = "编辑";
+    editButton.setAttribute("aria-label", `编辑 ${text}`);
     const button = document.createElement("button");
     button.type = "button";
     button.className = "todo-delete";
-    button.textContent = "删除";
+    button.dataset.action = "delete";
+    const deleteIcon = document.createElement("span");
+    deleteIcon.className = "delete-icon";
+    deleteIcon.setAttribute("aria-hidden", "true");
+    deleteIcon.textContent = "×";
+    const deleteText = document.createElement("span");
+    deleteText.className = "delete-text";
+    deleteText.textContent = "删除";
+    button.append(deleteIcon, deleteText);
     button.setAttribute("aria-label", `删除 ${text}`);
-    button.addEventListener("click", () => removeTodo(id));
-    li.append(label, button);
+    actions.append(editButton, button);
+    li.append(content, actions);
     list.append(li);
   });
   const completedCount = todos.filter((todo) => todo.completed).length;
@@ -104,6 +139,26 @@ function render() {
     button.setAttribute("aria-pressed", String(button.dataset.filter === currentFilter));
   });
 }
+
+// 只在父容器注册一次；render() 重建 li 后仍由这里接收点击。
+list.addEventListener("click", (e) => {
+  if (!(e.target instanceof Element)) return;
+  const item = e.target.closest("li");
+  if (!item || !list.contains(item)) return;
+  const id = item.dataset.id;
+  if (!id) return;
+  const delBtn = e.target.closest('[data-action="delete"]');
+  if (delBtn && item.contains(delBtn)) {
+    deleteTodo(id);
+    return;
+  }
+  const editBtn = e.target.closest('[data-action="edit"]');
+  if (editBtn && item.contains(editBtn)) {
+    editTodo(id);
+    return;
+  }
+  toggleTodo(id);
+});
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
