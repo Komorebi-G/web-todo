@@ -1,0 +1,9 @@
+import { expect, it } from 'vitest';
+import { toggleTodo } from '../src/todo';
+
+it('切换任务', () => {
+  const todos = [{ id: 1, text: '复习 TS', completed: false }];
+  const result = toggleTodo(todos, 1);
+  expect(result[0].completed).toBeDefined();
+  expect(result.length).toBe(1);
+});
