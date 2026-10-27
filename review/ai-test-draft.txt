@@ -1,5 +1,11 @@
 import { expect, it } from 'vitest';
-import { toggleTodo } from '../src/todo';
+import { addTodo, toggleTodo } from '../src/todo';
+
+it('新增一项任务', () => {
+  const todos = addTodo([], '复习 TypeScript');
+  expect(todos.length).toBe(1);
+  expect(todos[0]).toBeDefined();
+});
 
 it('切换任务', () => {
   const todos = [{ id: 1, text: '复习 TS', completed: false }];

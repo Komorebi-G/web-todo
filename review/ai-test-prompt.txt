@@ -1,4 +1,4 @@
-角色：你是一名 TypeScript 单元测试助手。目标：为 Todo 的 toggleTodo 设计 Vitest 测试。
-接口：toggleTodo(todos: readonly Todo[], id: number): Todo[]；Todo 包含 id、text、completed。
-约束：不要使用 any；测试数据在每个 it 内初始化，原数组不应被修改；验证正常切换和必要边界。
-输出：先给核心测试代码，再说明每个断言能证明什么。不要修改业务代码。
+角色与目标：你是 TypeScript 单元测试助手，用 Vitest 为 Todo 的 addTodo 和 toggleTodo 生成测试，不改业务代码。
+业务契约：Todo 的 id 是正整数、text 是字符串、completed 是布尔值。addTodo(todos: readonly Todo[], rawText: string): Todo[] 先 trim；空字符串或纯空格不新增，否则新增一个 completed=false、id 为当前最小可用正整数的任务。toggleTodo(todos: readonly Todo[], id: number): Todo[] 只翻转匹配任务；ID 不存在时内容不变。两个函数返回新数组，不修改传入数组或原任务。
+测试维度：覆盖空字符串、纯空格及首尾空格（空值、格式）；数字 ID 和不存在的 ID（类型、越界）；未完成与已完成、同一任务连续切换两次（状态、重复）；这两个函数是同步纯函数，不依赖网络或定时器（异步、依赖）；HTML 特殊文本仍应按普通字符串保存，页面安全应另查 textContent（安全）。null 不符合字符串参数类型，不要通过绕过类型检查伪造输入。
+输出约束：每个 it 自己准备数据；用明确的文字、数量、完成状态及原数组断言，不只测 toBeDefined 或长度；不要使用 any。先给核心测试代码，再简述每个断言要检查的业务结果。

@@ -25,6 +25,6 @@ npm run dev
 
 - `tests/todo.test.ts`：5 个基础用例，覆盖正常新增、空白拦截、切换指定项、不存在的 ID、已完成项再次切换；每个用例独立准备数据，断言业务内容和状态。
 - `review/ai-test-prompt.txt`、`review/ai-test-draft.txt`：结构化提问与待审查的 AI 测试初稿。
-- `tests/ai-review.test.ts`：针对初稿断言过弱和漏测连续切换两次，补充具体断言及边界测试。
+- `tests/ai-review.test.ts`：针对初稿断言过弱和遗漏的边界，补充状态变化、重复切换、不存在的 ID、空字符串/空格及 HTML 文字的具体断言。
 
 早期 JS 版本和第八周调试记录仍可在仓库的 `feature/w08-event-delegation` 分支查看。

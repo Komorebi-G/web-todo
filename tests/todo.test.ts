@@ -6,6 +6,7 @@ describe('手写：addTodo 和 toggleTodo', () => {
   it('新增任务，去掉首尾空格并保留内容', () => {
     const todos: Todo[] = [];
     const result = addTodo(todos, '  复习 TypeScript  ');
+    expect(result).toHaveLength(1);
     expect(result[0].text).toBe('复习 TypeScript');
     expect(result[0].completed).toBe(false);
     expect(result[0].id).toBe(1);
