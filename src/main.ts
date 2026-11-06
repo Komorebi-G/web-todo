@@ -4,7 +4,7 @@ import { loadTodos, saveTodos } from './storage';
 
 type Filter = 'all' | 'active' | 'completed';
 
-function requiredElement<T extends Element>(selector: string, type: { new(): T }): T {
+function requiredElement<T extends Element>(selector: string, type: { new (): T }): T {
   const element = document.querySelector(selector);
   if (!(element instanceof type)) throw new Error(`找不到页面元素：${selector}`);
   return element;
@@ -26,7 +26,9 @@ if (loaded.migrated && !saveTodos(localStorage, todos)) {
 
 function update(next: Todo[]): void {
   todos = next;
-  message.textContent = saveTodos(localStorage, todos) ? '' : '本次更改未保存，请检查浏览器存储设置。';
+  message.textContent = saveTodos(localStorage, todos)
+    ? ''
+    : '本次更改未保存，请检查浏览器存储设置。';
   render();
 }
 
@@ -93,6 +95,18 @@ function readId(value: string | undefined): number | null {
   return Number.isSafeInteger(id) ? id : null;
 }
 
+function editFromPrompt(id: number): void {
+  const todo = todos.find((entry) => entry.id === id);
+  if (!todo) return;
+  const text = window.prompt('编辑待办内容', todo.text);
+  if (text === null) return;
+  if (!text.trim()) {
+    message.textContent = '待办内容不能为空，原任务未修改。';
+    return;
+  }
+  update(editTodo(todos, id, text));
+}
+
 list.addEventListener('click', (event: MouseEvent) => {
   const target = event.target;
   if (!(target instanceof Element)) return;
@@ -107,15 +121,7 @@ list.addEventListener('click', (event: MouseEvent) => {
   }
   const editButton = target.closest('[data-action="edit"]');
   if (editButton && item.contains(editButton)) {
-    const todo = todos.find((entry) => entry.id === id);
-    if (!todo) return;
-    const text = window.prompt('编辑待办内容', todo.text);
-    if (text === null) return;
-    if (!text.trim()) {
-      message.textContent = '待办内容不能为空，原任务未修改。';
-      return;
-    }
-    update(editTodo(todos, id, text));
+    editFromPrompt(id);
     return;
   }
   update(toggleTodo(todos, id));

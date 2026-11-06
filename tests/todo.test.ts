@@ -22,7 +22,7 @@ describe('手写：addTodo 和 toggleTodo', () => {
   it('切换指定任务，其他任务不变', () => {
     const todos: Todo[] = [
       { id: 1, text: '第一项', completed: false },
-      { id: 2, text: '第二项', completed: false }
+      { id: 2, text: '第二项', completed: false },
     ];
     const result = toggleTodo(todos, 1);
     expect(result[0].completed).toBe(true);

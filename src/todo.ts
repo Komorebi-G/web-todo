@@ -19,9 +19,7 @@ export function addTodo(todos: readonly Todo[], rawText: string): Todo[] {
 }
 
 export function toggleTodo(todos: readonly Todo[], id: number): Todo[] {
-  return todos.map((todo) =>
-    todo.id === id ? { ...todo, completed: !todo.completed } : todo
-  );
+  return todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo));
 }
 
 export function deleteTodo(todos: readonly Todo[], id: number): Todo[] {
@@ -31,5 +29,5 @@ export function deleteTodo(todos: readonly Todo[], id: number): Todo[] {
 export function editTodo(todos: readonly Todo[], id: number, rawText: string): Todo[] {
   const text = rawText.trim();
   if (!text) return [...todos];
-  return todos.map((todo) => todo.id === id ? { ...todo, text } : todo);
+  return todos.map((todo) => (todo.id === id ? { ...todo, text } : todo));
 }

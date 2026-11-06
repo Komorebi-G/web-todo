@@ -1,16 +1,24 @@
 {
-  "name": "web-todo-w09",
-  "version": "2.0.0",
+  "name": "web-todo-w10",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc --noEmit && vite build",
-    "test": "vitest run --reporter=verbose"
+    "test": "vitest run",
+    "lint": "eslint src/ --max-warnings 3",
+    "format": "prettier --write src tests index.html style.css package.json tsconfig.json .eslintrc.cjs .prettierrc.json",
+    "format:check": "prettier --check src tests index.html style.css package.json tsconfig.json .eslintrc.cjs .prettierrc.json"
   },
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "eslint": "8.57.1",
+    "@typescript-eslint/parser": "8.46.2",
+    "@typescript-eslint/eslint-plugin": "8.46.2",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.6.2"
   }
 }

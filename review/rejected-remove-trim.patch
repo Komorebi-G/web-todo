@@ -1,0 +1,10 @@
+--- a/src/storage.ts
++++ b/src/storage.ts
+@@ -16,7 +16,6 @@
+   return (
+     isSavedId(item.id) &&
+     typeof item.text === 'string' &&
+-    item.text.trim() !== '' &&
+     typeof item.completed === 'boolean'
+   );
+ }
