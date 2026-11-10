@@ -241,3 +241,27 @@ input:focus-visible {
   background: #eaf1fb;
   color: #1e3a5f;
 }
+
+.todo-edit-form {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+.todo-edit-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px;
+  font: inherit;
+}
+@media (max-width: 420px) {
+  .todo-item {
+    flex-wrap: wrap;
+  }
+  .todo-content {
+    flex-basis: 100%;
+  }
+  .todo-actions {
+    margin-left: auto;
+  }
+}

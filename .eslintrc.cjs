@@ -3,10 +3,15 @@ module.exports = {
   env: { browser: true, es2022: true, node: true },
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  plugins: ['@typescript-eslint'],
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  plugins: ['@typescript-eslint', 'react-hooks'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'prettier',
+  ],
   ignorePatterns: ['dist/', 'node_modules/'],
-  overrides: [{ files: ['*.ts'] }],
+  overrides: [{ files: ['*.ts', '*.tsx'] }],
   rules: {
     complexity: ['error', 10],
     'max-depth': ['error', 3],

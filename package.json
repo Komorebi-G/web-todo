@@ -1,6 +1,6 @@
 {
-  "name": "web-todo-w10",
-  "version": "3.0.0",
+  "name": "web-todo-w11",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,17 +8,25 @@
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
     "lint": "eslint src/ --max-warnings 3",
-    "format": "prettier --write src tests index.html style.css package.json tsconfig.json .eslintrc.cjs .prettierrc.json",
-    "format:check": "prettier --check src tests index.html style.css package.json tsconfig.json .eslintrc.cjs .prettierrc.json"
+    "format": "prettier --write src tests index.html style.css package.json tsconfig.json vite.config.ts .eslintrc.cjs .prettierrc.json",
+    "format:check": "prettier --check src tests index.html style.css package.json tsconfig.json vite.config.ts .eslintrc.cjs .prettierrc.json"
   },
   "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@typescript-eslint/eslint-plugin": "8.46.2",
+    "@typescript-eslint/parser": "8.46.2",
+    "@vitejs/plugin-react": "4.7.0",
+    "eslint": "8.57.1",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "prettier": "3.6.2",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
-    "vitest": "^3.2.4",
-    "eslint": "8.57.1",
-    "@typescript-eslint/parser": "8.46.2",
-    "@typescript-eslint/eslint-plugin": "8.46.2",
-    "eslint-config-prettier": "10.1.8",
-    "prettier": "3.6.2"
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   }
 }

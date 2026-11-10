@@ -1,0 +1,8 @@
+本轮基于教师“假 React”代码整理的结构化指令，用于生成与核对修复，不是历史聊天逐字稿。
+角色与目标：作为 React + TypeScript 助手，把模板中的 TodoApp 改成状态驱动版本，并接入 W10 Todo。
+职责与数据：拆为 TodoApp、TodoForm、TodoList、TodoItem。todos 放在 TodoApp，子组件只读 Props，事件调用父组件回调；输入框用受控 State。
+禁止残留：删除 listRef、push 和对象属性直接赋值；不能使用 innerHTML、appendChild 或手动重建 React 列表；不能只给数组换壳却修改旧对象；不引入 forceUpdate、any 或关闭检查。
+更新要求：依赖旧状态的操作一律 setTodos(prev => ...)。保留 addTodo、toggleTodo、deleteTodo、editTodo 纯函数；map 必须返回结果，改变的任务用新对象。存储和日志放在依赖 todos 的 Effect 中。
+业务约束：trim 后为空不能新增或覆盖原任务；切换可以往返；保留删除、编辑取消、筛选、本地保存、异常提示及旧 ID 迁移；任务文本按普通文字渲染，key 使用稳定的任务 ID。
+交付：给出核心 TSX、Props 定义和每处前后差异。根入口查找 #root 允许，组件内不允许用 DOM 操作同步列表；useRef 只用于焦点控制。
+验证：运行保留的 17 项单测及针对不可变更新的补充用例、lint、format:check、build；浏览器操作“任务A”的增/切换/删并核对提交后的 todos 日志，再验证纯空白、编辑、筛选、刷新恢复。

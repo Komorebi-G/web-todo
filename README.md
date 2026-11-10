@@ -1,52 +1,33 @@
-# Web Todo V3.0
+# Web Todo V4.0
 
-Web 编程 W10：延续 W9 的 Vite + TypeScript Todo，补齐 ESLint、Prettier 和工程化审查。页面保留新增、编辑、切换、删除、筛选、本地保存和旧 UUID 数据迁移。
+Web 编程 W11：在 W10 的 Vite + TypeScript 工程上，用 React 重构学习待办。保留个人简历、任务增删改、完成状态往返切换、筛选、本地保存和旧 UUID 数据迁移。
 
-## 运行与检查
+## 运行
 
 ```sh
 npm ci
 npm run dev
-npx eslint src/
 npm run lint
 npm run format:check
 npm run test
 npm run build
 ```
 
-`build` 固定为 `tsc --noEmit && vite build`，`test` 固定为 `vitest run`，`tsconfig.json` 保持 `strict: true`。构建结果在 `dist/`。
+`build` 为 `tsc --noEmit && vite build`，`test` 为 `vitest run`，保持 TypeScript strict。新增 React 插件和自动 JSX 编译；ESLint 同时检查 TS/TSX，保留 W10 的复杂度、嵌套和禁止 any 规则，并检查 Hooks 使用和依赖。
 
-课程指定 `.eslintrc.cjs`，因此固定 ESLint 8.57.1；`overrides.files: ['*.ts']` 使 `npx eslint src/` 检查 TypeScript 文件。规则为 `complexity: ['error', 10]`、`max-depth: ['error', 3]`、`@typescript-eslint/no-explicit-any: 'error'`。`npm run lint` 额外限定最多 3 个 warning。Prettier 单独执行，`eslint-config-prettier` 避免格式规则冲突。依赖由 `package-lock.json` 锁定。
+## 组件与状态
 
-## 本周改造与业务规则
+- `src/components/TodoApp.tsx`：管理任务和筛选，调用原有纯函数，以函数式更新接入 React State。Effect 在状态提交后同步浏览器存储。
+- `TodoForm.tsx`：受控输入，拦截空白，添加成功后清空并恢复输入焦点。
+- `TodoList.tsx`：接收只读列表，用任务 ID 作 key，向每项传递回调。
+- `TodoItem.tsx`：显示单条任务，以回调通知切换和删除；本地 State 管理编辑草稿，保存时上报，取消时不更改任务。
 
-W9 基线为 `8a7bc1e`。首次检查有 5 个 error：列表点击回调复杂度 12，`isSavedItem` 为 11，`loadTodos` 为 14，以及两处 4 层嵌套。
+`src/main.tsx` 只负责挂载 React；组件不手动重建列表。表单 ref 仅用于焦点控制。筛选列表和数量从当前任务计算，不另存一份任务 State。旧版编辑弹窗改为行内表单，保留空白拦截和取消语义；完成状态用复选框切换，避免编辑/删除触发额外切换。
 
-- 把 ID 判断抽为 `isSavedId`，保留文字的 `trim` 校验和布尔状态检查。
-- 把旧 ID 迁移与重复项处理抽为 `restoreItems`，保留预留数字 ID、跳过重复项和异常提示。
-- 把编辑弹窗流程抽为 `editFromPrompt`，保留取消、空白拦截和编辑后的 `return`。
-- 所有业务函数仍在 `src/` 中，接受同一套 ESLint 检查。
+开发模式在浏览器控制台输出 `[todos]` 和提交后的 JSON 快照，便于按模板核对页面。它不是全局可写变量；生产构建移除此开发分支。StrictMode 首次挂载可能打印两次，不表示添加了两份任务。
 
-`addTodo`、`editTodo` 先去除首尾空白，空白输入不改变任务；已完成任务可以再次切回未完成。本地恢复会跳过纯空白文字，但对合法旧任务不擅自修剪原文。增删改与切换保持不可变更新，页面使用 `textContent` 显示任务文字。
+## 回归与审查
 
-## 测试与审查对照
+保留 W10 的 17 项业务和存储测试，增加 3 项针对不可变引用、编辑/删除及连续新增的用例，共 20 项。纯函数测试验证业务；实际浏览器操作另核对输入清空、完成样式、删除后的空列表、State 日志、编辑、筛选与刷新恢复。单测不代替组件操作验证。
 
-`tests/todo.test.ts` 与 `tests/ai-review.test.ts` 延续 W9 的 9 个测试；`tests/storage.test.ts` 新增 8 个恢复与保存用例，共 17 个用例。新增用例覆盖空白、脏数据、旧 ID 迁移、重复项、原文与状态保留、损坏 JSON、读写失败。
-
-本轮配置、重构、测试和记录使用 Codex 辅助。`review/engineering-prompt.txt` 保留整理后的结构化任务指令。为审查“检查通过但业务失败”，本轮主动让 AI 生成一个删掉 `item.text.trim() !== ''` 的反例；它不是历史会话中自然出现的错误。
-
-```sh
-node review/reproduce-rejected.mjs
-```
-
-该命令复制工程到系统临时目录，应用 `review/rejected-remove-trim.patch`，运行 ESLint 和针对性测试，最后删除临时副本。ESLint 通过，但业务测试因预期 `[2]`、实际 `[1, 2]` 而失败；脚本确认这种结果后结束，正式源码保持不变。反例已拒绝，发布版保留完整校验。
-
-成功时 ESLint 默认静默。需要明确的数量汇总，可运行：
-
-```sh
-npx eslint src/ -f ./review/eslint-summary.cjs
-```
-
-该 formatter 只汇总 ESLint 实际返回的错误和警告，不改变规则或退出状态。
-
-W7–W9 的历史实现与协作材料保留在原有 Git 分支中。
+`review/fake-react-original.txt` 为本周模板提供的错误靶子，不能作为应用入口；`review/react-prompt.txt` 为本轮整理的约束与核对指令。最终修复已落实在四个组件和 `src/todo.ts` 中。W9/W10 的旧审查材料保留在对应 Git 分支，不随本周重复打包。

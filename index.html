@@ -6,7 +6,7 @@
     <title>李本灏 · 简历与学习待办</title>
     <link rel="icon" href="data:," />
     <link rel="stylesheet" href="style.css" />
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
     <main class="resume">
@@ -57,43 +57,7 @@
           <p class="meta">李本灏 · 深圳大学</p>
         </section>
       </div>
-      <section class="todo-panel" aria-labelledby="todo-title">
-        <div class="todo-heading">
-          <h2 id="todo-title">学习待办</h2>
-          <span class="meta" id="todo-version">V3.0</span>
-        </div>
-        <p class="meta" id="todo-hint">先改数据，再更新页面；任务保存在当前浏览器。</p>
-        <form id="todo-form" novalidate>
-          <label for="todo-input">下一件准备做的事</label>
-          <div class="todo-entry">
-            <input
-              id="todo-input"
-              type="text"
-              placeholder="例如：复习 DOM 事件"
-              aria-describedby="todo-message"
-              autocomplete="off"
-            /><button type="submit">添加</button>
-          </div>
-        </form>
-        <p id="todo-message" role="status" aria-live="polite"></p>
-        <div id="todo-filters" role="group" aria-label="筛选待办">
-          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">
-            全部
-          </button>
-          <button class="filter-button" type="button" data-filter="active" aria-pressed="false">
-            未完成
-          </button>
-          <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">
-            已完成
-          </button>
-        </div>
-        <div class="todo-summary">
-          <h3>待办列表</h3>
-          <span id="todo-count" class="meta"></span>
-        </div>
-        <p id="empty-state" class="meta">还没有待办，先添加一件事。</p>
-        <ul id="todo-list"></ul>
-      </section>
+      <div id="root"></div>
     </main>
   </body>
 </html>
